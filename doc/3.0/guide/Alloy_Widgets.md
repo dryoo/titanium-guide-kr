@@ -27,16 +27,15 @@
 
 **app/widgets/foo/controllers/widget.js**  
    
-~~~
-var button = Widget.createController('button').getView();$.widget.add(button);
-~~~
+```
+var button = Widget.createController('button').getView();$.widget.add(button);```
 
 위젯 컨트롤러 안에 있는 모든 메소드들은 비공개 함수이기 때문에 Alloy 프로젝트에서 위젯의 내부 메소드를 사용하고 싶다면, $ 변수를 통해 외부로 공개해야한다. 예를 들어 다음과 같이 init 함수를 정의했다면, 
 
-~~~
-$.init = function (args) {    // Button object with id=button    $.button.title = args.title || 'Si';     $.button.color = args.color || 'black';     // global variable    message = args.message || 'Hola mundo';}~~~
+```
+$.init = function (args) {    // Button object with id=button    $.button.title = args.title || 'Si';     $.button.color = args.color || 'black';     // global variable    message = args.message || 'Hola mundo';}```
 Alloy 프로젝트에서 init을 함수를 접근하기 위해서는 $ 다음에 위젯의 ID를 먼저 참조해야한다. 따라서 다음과 같이 호출해야한다. 
-~~~$.foo.init({title:'Yes', color:'gray', message:'I pity the foo.'});~~~
+```$.foo.init({title:'Yes', color:'gray', message:'I pity the foo.'});```
 
 ### 모델 
 위젯에서 모델을 사용하는 방법은 일반적인 Alloy 프로젝트와 같다. 다만 모델이나 콜렉션을 생성하려면 다음과 같이 Widget.createModel(model_name, [params]) 이나 Widget.createCollection(model_name, [params]) 메소드를 호출해야한다. 위젯 뷰에서도 Model과 Collection 태그를 이용해 생성할수도 있다. 
@@ -49,16 +48,15 @@ $.init = function (args) {    // Button object with id=button    $.button.titl
 
 XML 마크업 요소에 id 속성을 지정하면, 타이타늄 객체에서 쉽게 접근 할수있다. 예를 들어, 위젯의 id가 foo 이고 이 위젯에 button 이라는 id를 가진 버튼 객체가 있다면 Alloy 프로젝트에서 버튼을 접근하기 위해서 다음과 같이 호출한다. 
 
-~~~
+```
 Ti.API.info("button state: " + $.foo.button.enabled);
-~~~
+```
 
 위젯 안에 또 다른 위젯을 포함하는 위젯은 Widget 태그에 name 속성을 부여한다. 이때 name 값은 뷰-컨트롤러에서 파일 확장자를 제외한 이름이다. 예를 들어 다음과 같은 마크업은 컨트롤러 섹션에 있는 예제와 유사하다. 
 **app/widgets/foo/views/widget.xml**
 
-~~~
-<Alloy>	<View>		<Widget src="foo" name="button"/>	</View></Alloy>
-~~~
+```
+<Alloy>	<View>		<Widget src="foo" name="button"/>	</View></Alloy>```
 
 ### 위젯
 [위젯 삽입하기][1]에 있는 방법에 따라 위젯은 또 다른 위젯을 포함할 수도 있다. 이때 위젯 안에 추가되는 위젯은 widget.json 파일에 의존성을 기술해야된다. 이렇게 widget.json 설정 파일에 의존성이 기술된 위젯을 생성하려면 Widget.createWidget(widget_name, [controller_name], [params]) 메소드를 사용한다. 참고로 Alloy 프로젝트에서 위젯을 사용할때는 config.json 설정 파일에 의존성을 기술했지만, 위젯 안에 또다른 위젯을 정의하는 경우에는 위젯 설정파일(widget.json)에 의존성을 기술한다.   
