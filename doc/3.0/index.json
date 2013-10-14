@@ -31,6 +31,48 @@
         			"title" : "Alloy 뷰",
         			"link"  : "Alloy_Views",
         			"editor": []
+        		},
+        		{
+        			"title" : "Alloy 컨트롤러",
+        			"link"  : "Alloy_Controllers",
+        			"editor": []
+        		},
+        		{
+        			"title" : "Alloy 모델",
+        			"link"  : "Alloy_Models",
+        			"editor": []
+        		},
+        		{
+        			"title" : "Alloy 위젯",
+        			"link"  : "Alloy_Widgets",
+        			"editor": ["miconblog"]
+        		},
+        		{
+        			"title" : "Alloy 테스크",
+        			"link"  : "Alloy_Tasks",
+        			"editor": []
+        		},
+        		{
+        			"title" : "Alloy 레퍼런스 가이드",
+        			"link"  : "Alloy_Reference_Guides",
+        			"editor": [],
+        			"sub" 	: [
+        				{
+		        			"title" : "Alloy 커맨드 라인 인터페이스 레퍼런스",
+		        			"link"  : "Alloy_Command-Line_Interface_Reference",
+		        			"editor": []
+		        		}
+        			]
+        		},
+        		{
+        			"title" : "Alloy 디버깅과 문제해결",
+        			"link"  : "Alloy_Debugging_and_Troubleshooting",
+        			"editor": []
+        		},
+        		{
+        			"title" : "Alloy 베스트 프랙티스와 추천",
+        			"link"  : "Alloy_Best_Practices_and_Recommendations",
+        			"editor": []
         		}
         	]
         },
