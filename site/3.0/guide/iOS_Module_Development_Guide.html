@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="ko"><head><title>iOS Module_Development_Guide</title><meta charset="utf-8"><meta name="description" content="Titanium Guide"><link rel="stylesheet" href="/titanium-guide-kr/stylesheets/stylesheet.css" media="screen"></head><body></body><!-- HEADER --><div id="header_wrap" class="outer"><header class="inner"><a id="forkme_banner" href="https://github.com/miconblog/titanium-guide-kr">View on GitHub</a><h1 id="project_title">iOS Module_Development_Guide</h1></header></div><div id="main_content_wrap" class="outer"><section id="main_content" class="inner"><h2>개요</h2>
+
+<p>타이타늄은 타이타늄+플러스 모듈이라고 불리는 추가적인 확장을 통해 내장 기능을 확장할 수있는 방법을 제공한다. 이 문서에서 이런 모듈을 확장하는 방법을 간략하게 알아본다.</p>
+
+<p>이 문서는 다음과 같은 iOS 모듈 개발 과정을 다룬다. </p>
+
+<ul>
+<li>1단계, iOS 모듈 개발 환경 설정 한다.</li>
+<li>2단계, 첫 예제 모듈을 만들기 위한 과정을 차근차근 밟아본다. </li>
+<li>3단계, 모듈의 기본 아키텍처를 설명한다. </li>
+<li>4단계, 앞에서 만든 모듈을 배포하는 방법에 대해 설명한다. </li>
+</ul>
+
+<h2>iOS 모듈 개발을 위한 준비</h2>
+
+<p>iOS용 모듈을 만드려면, iOS 애플리케이션을 만드는데 필요한 모든 소프트웨어가 다 필요하다. </p>
+
+<ul>
+<li>타이타늄 SDK</li>
+<li>iOS SDK와 해당 버전에 맞는 Xcode, 제세한 내용은 <a href="http://docs.appcelerator.com/titanium/3.0/#!/guide/Installing_and_Updating_iOS_SDK">iOS SDK 설치와 업데이트</a>를 참고한다. </li>
+<li>타이타늄 스튜디오 또는 타이타늄 커멘드-라인 인터페이스(CLI) </li>
+</ul>
+
+<p>추가로 모듈 빌드를 위해서 파이썬과 파이썬 마크다운(markdown) 모듈이 모두 필요하다. 자세한 설치방법은 다음을 참고한다. </p>
+
+<ul>
+<li><a href="http://docs.appcelerator.com/titanium/3.0/#!/guide/Installing_Python">파이썬</a></li>
+<li><a href="http://docs.appcelerator.com/titanium/3.0/#!/guide/Installing_Required_Python_Packages">파이썬 설치툴</a></li>
+</ul>
+
+<p>iOS 애플리케이션 개발과 마찬가지로 iOS 모듈을 개발하며려 맥 OS X가 반드시 필요하다. </p>
+
+<h2>1단계: 모듈 개발 환경 설정하기</h2>
+
+<p>개발 환경을 설정하려면 먼저 헬퍼 스크립트를 타이타늄 설치 경로에 두거나 기존 구버전의 타이타늄 CLI 스크립트(titanium.py)를 가리키는 별도의 이름을 설정해야한다. 참고로 베타 버전에 포함된 최신 타이타늄 CLI는 모듈 개발을 지원하지 않는다. </p>
+
+<p>자세한 별칭 설정 방법은 <a href="http://docs.appcelerator.com/titanium/3.0/#!/guide/Legacy_Command-Line_Interface">레거시 커멘드-라인 인터페이스</a>를 참고한다. </p>
+
+<h2>2단계: 첫번째 모듈 만들기</h2>
+
+<p>모듈을 만들기 전에 테스트 모듈을 만들어서 환경설정이 제대로 됐는지 확인해보자. </p>
+
+<p>모듈을 만들기 위해서는 다음과 같은 명령을 콘솔창에 입력한다. </p>
+
+<aside>
+  <p>$titanium.py create --platform=iphone --type=module --dir=~/tmp/ --name=test --id=com.example.test</p>
+</aside>
+
+<p>명령 실행후 다음과 같은 메시지를 볼수있다. </p>
+
+<aside>
+  <p>Appcelerator Titanium XCode templates installed
+  Created iphone module project</p>
+</aside>
+
+<p>이제 새로운 모듈은 ~/tmp/test 경로에 만들어졌을 것이다. 그럼 새로 생성된 모듈을 확인해보자.</p>
+
+<aside>
+  <p>$cd ~/tmp/test
+  $ls -la</p>
+</aside>
+
+<p>대충 아래와 같은 파일들을 볼 수 있다. </p>
+
+<aside>
+  <p>drwxr-xr-x   18 jhaynie  staff   612 Nov  2 12:11 .
+  drwxr-xr-x  193 jhaynie  staff  6562 Nov  2 12:11 ..
+  -rw-r--r--    1 jhaynie  staff    20 Nov  2 12:11 .gitignore
+  drwxr-xr-x    7 jhaynie  staff   238 Nov  2 12:11 Classes
+  -rw-r--r--    1 jhaynie  staff    62 Nov  2 12:11 ComExampleTest_Prefix.pch
+  -rw-r--r--    1 jhaynie  staff    78 Nov  2 12:11 LICENSE
+  -rw-r--r--    1 jhaynie  staff  4877 Nov  2 12:11 README
+  drwxr-xr-x    3 jhaynie  staff   102 Nov  2 12:11 assets
+  -rwxr-xr-x    1 jhaynie  staff  6493 Nov  2 12:11 build.py
+  drwxr-xr-x    3 jhaynie  staff   102 Nov  2 12:11 documentation
+  drwxr-xr-x    3 jhaynie  staff   102 Nov  2 12:11 example
+  drwxr-xr-x    7 jhaynie  staff   238 Nov  2 12:11 hooks
+  -rw-r--r--    1 jhaynie  staff   394 Nov  2 12:11 manifest
+  -rw-r--r--    1 jhaynie  staff   777 Nov  2 12:11 module.xcconfig
+  drwxr-xr-x    3 jhaynie  staff   102 Nov  2 12:11 platform
+  drwxr-xr-x    3 jhaynie  staff   102 Nov  2 12:11 test.xcodeproj
+  -rw-r--r--    1 jhaynie  staff   429 Nov  2 12:11 timodule.xml
+  -rw-r--r--    1 jhaynie  staff   481 Nov  2 12:11 titanium.xcconfig</p>
+</aside>
+
+<p>위 파일과 폴더에 대한 설명은 다음과 같다. </p>
+
+<pre><code>Filename / Directory        Description / Purpose
+.gitignore                  A special .gitignore file used by the revision control system git to instruct it to ignore certain temporary files and directories. This file is not distributed with your module. This file can be safely ignored if you are not using git.
+Classes                     The directory where you Objective-C headers and implementation classes should go. These files are not distributed with your module and are used by the Xcode compiler.
+ComExampleTest_Prefix.pch   The pre-compiled header file. This file is not distributed with your module and is used by the Xcode compiler.
+LICENSE                     The file for describing the contents of your module&#39;s license text. This file is distributed with your module to end-users.
+README                      The file that gives a short explanation of the module project. This file is not distributed with your module.
+assets                      The directory where you should place module assets such as images.
+build.py                    This file is a script that will compile and package your module for usage and distribution.
+documentation               The directory where you should place your module documentation for end-users. The file index.md is a Markdown-formatted template file that you should use when writing your module documentation. This is only required for module distributed in the Titanium+Plus Market-place. You can safely ignore this directory if you do not intend to distribute your module.
+example                     The directory where your module example(s) should go. The file app.js will be generated to include a sample loading of your module in a test window. This file can be used for quickly testing your module as well as give an example to end-users on how to use your module. This directory is distributed with your module.
+hooks                       The directory is currently ignored and reserved for future use.
+manifest                    A special file that describes meta-data about your module and used by the Titanium compiler. This file is required and is distributed with your module.
+module.xcconfig             A special file used by Xcode when your module is compiled in an end-user Titanium application which references your module. This file is a Xcode configuration file which can setup special compiler and linker directives that are specific to your module. This file is distributed with your module.
+platform                    Directory for platform-specific assets. This is analogous to the platform directory in a standard Titanium application project, and contains platform-specific assets that are not processed by Titanium (for example, Android styles and themes).
+test.xcodeproj              The directory which contains your Xcode project. This directory is not distributed with your module.
+timodule.xml                Titanium module configuration file. The format is described in tiapp.xml and timodule.xml Reference.
+titanium.xcconfig           A special file used by Xcode when your module is compiled when building your module. This file is a Xcode configuration file which can setup special compiler and linker directives that are specific to your module. This file is not distributed with your module and only used during module development.
+</code></pre>
+
+<h3>테스트 모듈을 Xcode로 열기</h3></section></div></html>

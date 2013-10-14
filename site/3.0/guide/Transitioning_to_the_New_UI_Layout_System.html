@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="ko"><head><title>Transitioning to_the_New_UI_Layout_System</title><meta charset="utf-8"><meta name="description" content="Titanium Guide"><link rel="stylesheet" href="/titanium-guide-kr/stylesheets/stylesheet.css" media="screen"></head><body></body><!-- HEADER --><div id="header_wrap" class="outer"><header class="inner"><a id="forkme_banner" href="https://github.com/miconblog/titanium-guide-kr">View on GitHub</a><h1 id="project_title">Transitioning to_the_New_UI_Layout_System</h1></header></div><div id="main_content_wrap" class="outer"><section id="main_content" class="inner"><h2>Contents</h2>
+
+<h2>Overview</h2>
+
+<h2>Understanding the UI Layout System Changes</h2>
+
+<p>이번 절에서는 2.0 버전에서 구현된 새로운 레이아웃 시스템에 대해서 설명한다.  </p>
+
+<h3>Summary of Layout Properties</h3>
+
+<p>아래 표는 뷰 레이아웃에 영향을 주는 속성들을 요약한 내용이다.
+| 이름 | 설명 |
+| :--- | :--- |
+| width | 컴포넌트의 너비 | 
+| height | 컴포넌트의 높이 |
+| left | 부모를 기준으로 상대적인 값을 갖는다. horizontal 레이아웃에서는 같은 형제 컴포넌트들간의 패딩(padding) 값으로 동작한다. | 
+| right | 부모를 기준으로 상대적인 값을 갖는다. horizontal 레이아웃에서는 같은 형제 컴포넌트들간의 패딩(padding) 값으로 동작한다. | 
+| top | 부모를 기준으로 상대적인 값을 갖는다. vertical 레이아웃에서는 같은 형제 컴포넌트들간의 패딩(padding) 값으로 동작한다. | 
+| bottom | 부모를 기준으로 상대적인 값을 갖는다. vertical 레이아웃에서는 같은 형제 컴포넌트들간의 패딩(padding) 값으로 동작한다. | 
+| center | 뷰의 중심을 나타내는 x와 y 값을 갖는다. 부모의 좌상단값을 기준으로 한다. |
+| layout | 자식 컴포넌트들을 어떻게 배치할지 결정한다. "vertical", "horizontal", "composite" 중 하나를 선택할수있고, 기본값은 절대좌표계와 유사한 "composite" 다.
+| zIndex | Stack order of UI component in its parent. Higher values are rendered towards the top, in front of components with lower values. If no zIndex value is set, components stack in the order in which they are added to the parent, with the last child added displayed on top of earlier children. Any component with a defined zIndex value is displayed in front of any components with undefined zIndex. Does not affect the actual layout of this component.
+| size | 2.0 이전에는 레이아웃 인자로 사용됐지만, 2.0 이후에는 읽기 전용 속성으로 뷰의 면전(크기)를 결정하는데 사용된다. 자세한 내용은 [#Control Size and Position and Post-Layout Event]. |
+| rect | 2.0에서 새롭게 추가된 읽기 전용 속성으로 뷰의 크기와 위치를 결정하는데 사용된다. 자세한 내용은 [#Control Size and Position and Post-Layout Event]를 참고한다. |</p>
+
+<h3>View Types and Default Layout Behavior</h3>
+
+<h4>Auto Size Views</h4>
+
+<ul>
+<li>Button</li>
+<li>Label</li>
+<li>ImageView</li>
+<li>ProgressBar</li>
+<li>Switch</li>
+<li>TextArea</li>
+<li>TextField</li>
+<li>Picker</li>
+<li>ButtonBar</li>
+<li>TableViewSection</li>
+</ul>
+
+<h4>Auto Fill Views</h4>
+
+<ul>
+<li>View</li>
+<li>TabGroup</li>
+<li>VideoPlayer</li>
+<li>TableView</li>
+<li>WebView</li>
+<li>ScrollView</li>
+<li>ScrollableView</li>
+</ul>
+
+<h4>Auto Fill Width Views</h4>
+
+<ul>
+<li>Slider</li>
+<li>TableViewRow</li>
+<li>Toolbar</li>
+<li>SearchBar</li>
+</ul>
+
+<h3>레이아웃 우선순위</h3>
+
+<p>| | Name | Notes |
+|:--- | :--- | :--- |
+| 1 | width | If width is defined, it takes precedence and the positioning pins are not used to determine the view&#39;s width. If width is not defined, and at least two horizontal positioning pins are defined, the width is calculated implicitly from the pins. For example, left and right or left and center.x. If all three horizontal pins are defined, the width is determined by the left and center.x pins. If width cannot be implicitly calculated it follows the view&#39;s default sizing behavior.
+| 2 | left | If left is defined, it always takes precedence for positioning the view horizontally.
+| 3 | center.x | Used to position the view horizontally if left is not set. If left is set, this property is not used to position the view, although it may be used to determine its width.
+| 4 | right | Used to position the view horizontally when neither left or center.x is set. If either left or center.x is set, this property is not used to position the view, although it may be used to determine its width.
+| 5 | height | If height is defined, it takes precedence and the positioning pins are not used to determine the view&#39;s height. If height is not defined, and at least two vertical positioning pins are defined, the height is determined implicitly from the pins. If all three vertical pins are defined, the height is determined by the top and center.y pins. If height cannot be implicitly calculated it follows the view&#39;s default sizing behavior.
+| 6 | top | If specified, always takes precedence for positioning the view horizontally. 
+| 7 | center.y | Used to position the view vertically if top is not set. If top is defined, this property is not used to position the view, although it may be used to determine its height.
+| 8 | bottom | Used to position the view vertically if neither top or center.y is set. If either top or center.y is set, this property is ignored. this property is not used to position the view, although it may be used to determine its height.</p>
+
+<h3>Batch Layout Updates</h3>
+
+<h3>Control Size and Position and Post-Layout Event</h3>
+
+<h3>Universal Unit Support</h3>
+
+<p>| <em>Unit</em> | <em>Abbreviation</em> | <em>Note</em> |
+| :--- | :--- | :--- |
+| pixels | px | | 
+| density-independent pixels | dip or dp | Equivalent to Apple "points." |
+| inches | in | |
+| millimeters | mm | Android, iOS only |
+| centimeters | cm | Android, iOS only |
+| points | pt | 1/72 of an inch. Android only. Not to be confused with Apple "points." |</p>
+
+<h3>Horizontal and Vertical Layouts</h3>
+
+<p>&#39;horizontal&#39;과 &#39;vertical&#39; 레이아웃은 별도의 계산이 들어가므로 &#39;composite&#39;보다는 느리다. </p>
+
+<h3>Special Cases for Parent and Child Sizing</h3>
+
+<h2>Behavior Changes in Release 2.0</h2></section></div></html>
